@@ -83,7 +83,9 @@ def scrape_url(url, domain=None, visited_webpages={*()}, iteration=0):
     # Print all links on current page
     print("All links on current page:-")
     for link in all_links:
-        print(f"\t{link['href']}")
+        # Only print valid links
+        if link['href'] != '#' and link['href'] != '#!':
+            print(f"\t{link['href']}")
 
     # For each link in page
     for link in all_links:
@@ -91,30 +93,34 @@ def scrape_url(url, domain=None, visited_webpages={*()}, iteration=0):
         # Obtain the Href for the A tag
         raw_link = link['href']
 
-        # Check there is content to the link
-        if raw_link != "#":
+        # Checks length of "link" and validity
+        if raw_link != '#' and len(raw_link) > 1:
 
-            # Check to see whether there is no domain
-            if "http" not in raw_link:
-                raw_link = domain[:-1] + raw_link
+            # Check the link is not a zip or pdf
+            if not raw_link.endswith(('.pdf', '.zip')):
 
-            #  Check to see whether it is a parameter based URL
-            if "?" in raw_link:
-                raw_link = raw_link.split('?')[0]
+                # Check to see whether there is no domain
+                if "http" not in raw_link:
+                    raw_link = domain[:-1] + raw_link
 
-            # If the domain is within the link
-            if domain in raw_link:
+                #  Check to see whether it is a parameter based URL
+                if "?" in raw_link:
+                    raw_link = raw_link.split('?')[0]
 
-                # Check to see whether the page has already been visited
-                if raw_link not in visited_webpages:
+                # If the domain is within the link
+                if domain in raw_link:
 
-                    # Increment iteration
-                    iteration += 1
-                    # Append website to set
-                    visited_webpages.add(raw_link)
-                    print(f"Visiting Unique URL: {raw_link}")
-                    # Recursive function call
-                    scrape_url(raw_link, domain, visited_webpages, iteration)
+                    # Check to see whether the page has already been visited
+                    if raw_link not in visited_webpages:
+
+                        # Increment iteration
+                        iteration += 1
+                        # Append website to set
+                        visited_webpages.add(raw_link)
+                        print(f"Visiting Unique URL: {raw_link}")
+                        # Recursive function call
+                        scrape_url(raw_link, domain,
+                                   visited_webpages, iteration)
 
     # Return set of unique internal domain refs
     return visited_webpages
