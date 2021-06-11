@@ -18,10 +18,6 @@ from urllib.parse import urlparse
 import argparse
 
 
-# starting URL
-starting_url = "http://www.vk.com"
-
-
 def webpage_to_soup(url):
     """
     Convert a URL to a Soup Object
