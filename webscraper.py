@@ -19,6 +19,7 @@ from bs4 import BeautifulSoup
 # starting URL
 starting_url = "https://www.vk.com/"
 
+
 def webpage_to_soup(url):
     """
     Convert a URL to a Soup Object
@@ -41,7 +42,6 @@ def scrape_url(url, domain=None, visited_webpages={*()}, iteration=0):
 
     # If first iteration of loop, initialise set and domain
     if iteration == 0:
-        # Create an empty set of visited websites
         # Re-define specified url for page specific definition
         domain = requests.get(url).request.url
 
@@ -50,6 +50,11 @@ def scrape_url(url, domain=None, visited_webpages={*()}, iteration=0):
 
     # Obtain all "a" links on page
     all_links = new_webpage.findAll("a", href=True)
+
+    print(f"Current Page: {url}")
+    print("All links on current page:-")
+    for link in all_links:
+        print(f"\t{link['href']}")
 
     # For each link in page
     for link in all_links:
@@ -78,22 +83,20 @@ def scrape_url(url, domain=None, visited_webpages={*()}, iteration=0):
                     # Append website to set
                     visited_webpages.add(raw_link)
 
-                    # DEBUG
-                    print(visited_webpages)
-                    print(f"Visiting: {raw_link}")
-                    # DEBUG
+                    print(f"Visiting Unique URL: {raw_link}")
 
                     # Call function again
                     scrape_url(raw_link, domain, visited_webpages, iteration)
 
-                else:
+                # else:
                     # Confirm URL already visited
-                    print("URL already visited!")
+                    # DEBUG
+                    # print("URL already visited!")
 
     return visited_webpages
 
 
 if __name__ == "__main__":
     visited_webpages = scrape_url(starting_url)
-    print(visited_webpages)
+    print(f"Unique Domain Level URLs: {visited_webpages}")
     exit(1)
