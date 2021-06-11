@@ -3,7 +3,7 @@ Webscraper
 ===================================================
 
 Webscraper is a python utility designed to visit
-all internal links within a given doman, and return a 
+all internal links within a given doman, and return a
 list of all links found within each page visited.
 
 See https://github.com/BAK2K3/webscraper/blob/main/README.md
