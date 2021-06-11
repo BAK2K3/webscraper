@@ -40,7 +40,7 @@ To run this tool as a module, import the following:
 
 Within your code, you can call the function as follows:
 
-`returned_set = scrape_url("https://<website>)`
+`returned_set = scrape_url("https://<website>")`
 
 The function will return a set of all unique domain level links within the website.
 
