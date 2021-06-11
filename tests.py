@@ -1,5 +1,5 @@
 import unittest
-from webscraper import webpage_to_soup, scrape_url
+from webscraper import scrape_url
 
 
 class WebscraperTests(unittest.TestCase):
