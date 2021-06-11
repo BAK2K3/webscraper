@@ -11,14 +11,15 @@ for complete documentation.
 
 Created by Benjamin Kavanagh (BAK2K3) 2021.
 """
-
+import sys
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
+import argparse
 
 
 # starting URL
-starting_url = "www.vk.com"
+starting_url = "http://www.vk.com"
 
 
 def webpage_to_soup(url):
@@ -50,29 +51,27 @@ def scrape_url(url, domain=None, visited_webpages={*()}, iteration=0):
         The domain of the URL (Default=None)
     visitied_webpages: set
         Set of unique web addresses visited (Default = Empty Set)
-    iteration: int 
+    iteration: int
         Function's current iteration (Default = 0)
     """
 
     # Check that a valid iteration has been provided
     if not isinstance(iteration, int):
-        raise ValueError("Instance variable must be an integer.")
+        raise TypeError("Instance variable must be an integer.")
 
     # If first iteration of loop initialise domain
     if iteration == 0:
 
-        # Prepares URL provided if required
-        if "http" not in url:
-            url = "https://" + url
         # Check that a valid URL has been provided
         if not urlparse(url).netloc:
-            raise ValueError("Invalid URL provided.")
+            raise ValueError("Invalid URL - Remember to include protocol")
         # Check that visited_webpages is a set
         if not isinstance(visited_webpages, set):
             raise TypeError("visited_webpages must be a set")
 
         # Re-define specified url for page specific definition
         domain = requests.get(url).request.url
+        visited_webpages.add(domain)
         print(f"Starting URL: {domain}")
 
     # Create a new soup object from the current url
@@ -122,6 +121,19 @@ def scrape_url(url, domain=None, visited_webpages={*()}, iteration=0):
 
 
 if __name__ == "__main__":
+
+    # Parse Optional input arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--url', help="Starting URL for scraping",
+                        type=str, required=False)
+    args = parser.parse_args()
+
+    # Check whether a value has been provided
+    if args.url is None:
+        starting_url = input("Please input a valid URL (including protocol): ")
+    else:
+        starting_url = args.url
+
     visited_webpages = scrape_url(starting_url)
     print(f"Unique Domain Level URLs: {visited_webpages}")
-    exit(1)
+    sys.exit()
