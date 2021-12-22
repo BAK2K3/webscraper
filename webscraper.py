@@ -139,3 +139,6 @@ if __name__ == "__main__":
     visited_webpages = scrape_url(starting_url)
     print(f"Unique Domain Level URLs: {visited_webpages}")
     sys.exit()
+
+
+# Comment 1
